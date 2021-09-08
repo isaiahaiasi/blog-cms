@@ -1,7 +1,24 @@
-html,
-body,
 #root {
-  height: 100%;
+  /* height: 100%; */
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+/* DEFAULT OVERRIDES */
+/* TODO: replace w CSS reset/normalizer */
+p {
+  margin: 0;
+}
+
+button {
+  font-size: 1em;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+li {
+  list-style: none;
 }
 
 .App {
@@ -12,25 +29,48 @@ body,
 }
 
 .Header {
+  padding: 0.4rem;
+  background: green;
+}
+
+.content-bar {
   display: flex;
   justify-content: space-between;
-  background: green;
 }
 
 .Main {
   background: grey;
   display: flex;
   overflow: hidden;
+  flex: 1;
 }
 
 .Sidebar {
+  box-sizing: border-box;
   background: blue;
+  width: 15rem;
+  overflow: auto;
+  padding: 0 1rem;
+  transition: 1s;
+}
+
+.Sidebar.hidden {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.SidebarSectionheader {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 2;
 }
 
 .EditorContainer {
   flex: 1;
   display: flex;
   justify-content: center;
+  padding: 0 0 0 1rem;
 }
 
 .EditorColumn {
@@ -40,6 +80,12 @@ body,
   max-width: 45rem;
 }
 
+.EditorToolbar {
+  height: 6rem;
+  background: lightgray;
+  border-bottom: 1px solid grey;
+}
+
 .EditorPage {
   display: flex;
   flex-direction: column;
@@ -47,14 +93,23 @@ body,
   background: white;
   padding: 2rem;
   font-size: 1.4rem;
+  border-radius: 0 0 0 2rem;
 }
 
 .EditorPublishBar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  height: 6rem;
 }
 
 .EditorPage-Title {
   font-size: 2rem;
   font-weight: bold;
+}
+
+.Button {
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
 }
