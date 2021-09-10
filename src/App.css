@@ -26,11 +26,12 @@ li {
   flex-direction: column;
   position: absolute;
   inset: 0;
+  color: var(--col-complementary);
 }
 
 .Header {
   padding: 0.4rem;
-  background: green;
+  background: var(--col-accent);
 }
 
 .content-bar {
@@ -39,7 +40,7 @@ li {
 }
 
 .Main {
-  background: grey;
+  background: var(--col-primary);
   display: flex;
   overflow: hidden;
   flex: 1;
@@ -47,7 +48,7 @@ li {
 
 .Sidebar {
   box-sizing: border-box;
-  background: blue;
+  background: var(--col-intermediate-primary);
   width: 15rem;
   overflow: auto;
   padding: 0 1rem;
@@ -82,15 +83,15 @@ li {
 
 .EditorToolbar {
   height: 6rem;
-  background: lightgray;
-  border-bottom: 1px solid grey;
+  background: var(--col-accent-primary);
+  border-bottom: 1px solid var(--col-accent-complementary);
 }
 
 .EditorPage {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background: white;
+  background: var(--col-intermediate-primary);
   padding: 2rem;
   font-size: 1.4rem;
   border-radius: 0 0 0 2rem;
@@ -112,4 +113,10 @@ li {
 .Button {
   padding: 0.4rem 1rem;
   border-radius: 0.5rem;
+  background: var(--col-accent-primary);
+  color: var(--col-complementary);
+}
+
+.Footer {
+  background: var(--col-accent-primary);
 }

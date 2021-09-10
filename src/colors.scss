@@ -1,0 +1,27 @@
+/* color "tokens" for light vs dark mode */
+/* 
+    "primary" - the dominant color--dark theme: dark grey
+    "complementary" - the opposite of the dominant color--dark theme: white/light grey
+    "accent" - the actual *color*
+    "intermediate
+*/
+
+.theme-dark {
+  --col-primary: rgb(17, 17, 17);
+  --col-complementary: white;
+  --col-accent: rebeccapurple;
+  --col-accent-primary: rgb(48, 13, 83);
+  --col-intermediate: grey;
+  --col-intermediate-primary: rgb(31, 31, 31);
+  --col-intermediate-complementary: rgb(187, 187, 187);
+}
+
+.theme-light {
+  --col-primary: lightgrey;
+  --col-complementary: black;
+  --col-accent: cornflowerblue;
+  --col-accent-primary: rgb(174, 202, 255);
+  --col-intermediate: grey;
+  --col-intermediate-primary: white;
+  --col-intermediate-complementary: rgb(31, 31, 31);
+}

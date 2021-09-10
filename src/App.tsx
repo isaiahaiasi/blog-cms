@@ -6,14 +6,14 @@ interface AppProps {}
 
 function App({}: AppProps) {
   return (
-    <div className="App">
+    <div className="App theme-dark">
       <div className="Header content-bar">
         <div className="btn-grp-left">
           <button className="Button">Home</button>
         </div>
         <div className="btn-grp-right">
           <button className="Button">Reader</button>
-          <button className="Button">Github</button>
+          <button className="Button dark">Github</button>
         </div>
       </div>
       <main className="Main">
