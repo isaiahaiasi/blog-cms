@@ -1,0 +1,20 @@
+.Sidebar {
+  box-sizing: border-box;
+  background: var(--col-intermediate-primary);
+  width: 15rem;
+  overflow: auto;
+  padding: 0 1rem;
+  transition: 1s;
+
+  &.hidden {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+.SidebarSectionheader {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 2;
+}
