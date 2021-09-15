@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
@@ -18,8 +19,16 @@ function App({}: AppProps) {
   return (
     <div className={`App ${theme}`}>
       <Header />
-      <MainLogin />
-      {/* <MainCMS /> */}
+      <main className="Main">
+        <Router>
+          <Route path="/login">
+            <MainLogin />
+          </Route>
+          <Route path="/editor">
+            <MainCMS />
+          </Route>
+        </Router>
+      </main>
       <Footer />
     </div>
   );

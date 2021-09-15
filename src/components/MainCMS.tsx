@@ -4,9 +4,9 @@ import Sidebar from './Sidebar';
 
 export default function MainCMS() {
   return (
-    <main className="Main">
+    <>
       <Sidebar />
       <Editor />
-    </main>
+    </>
   );
 }

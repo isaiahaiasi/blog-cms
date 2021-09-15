@@ -3,7 +3,7 @@ import './MainLogin.scss';
 
 export default function MainLogin() {
   return (
-    <main className="Main login-container">
+    <div className="login-container">
       <form className="form login-form">
         <label>
           <div>Username:</div>
@@ -17,6 +17,6 @@ export default function MainLogin() {
           Login
         </button>
       </form>
-    </main>
+    </div>
   );
 }
