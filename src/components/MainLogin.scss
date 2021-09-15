@@ -1,0 +1,32 @@
+/* general */
+.form {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    input {
+      display: block;
+      flex: auto 1 0;
+      line-height: 1.5rem;
+      border-radius: 5px;
+      border: none;
+    }
+  }
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  background: var(--col-accent);
+  padding: 1rem;
+  border-radius: 10px;
+  row-gap: 1rem;
+}

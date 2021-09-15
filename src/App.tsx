@@ -3,8 +3,9 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
 import './App.css';
-import Editor from './components/Editor';
 import Footer from './components/Footer';
+import MainCMS from './components/MainCMS';
+import MainLogin from './components/MainLogin';
 
 type Theme = 'theme-dark' | 'theme-light';
 
@@ -17,10 +18,8 @@ function App({}: AppProps) {
   return (
     <div className={`App ${theme}`}>
       <Header />
-      <main className="Main">
-        <Sidebar />
-        <Editor />
-      </main>
+      <MainLogin />
+      {/* <MainCMS /> */}
       <Footer />
     </div>
   );
