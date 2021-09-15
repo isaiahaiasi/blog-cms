@@ -1,0 +1,33 @@
+/* color "tokens" for light vs dark mode */
+
+.theme-dark {
+  --col-bg: rgb(17, 17, 17);
+  --col-bg-300: var(--col-bg);
+  --col-bg-500: rgb(31, 31, 31);
+  --col-bg-700: rgb(70, 70, 70);
+  --col-bg-800: rgb(100, 100, 100);
+
+  --col-fg: white;
+  --col-fg-500: var(--col-fg);
+  --col-fg-700: rgb(187, 187, 187);
+
+  --col-accent: rebeccapurple;
+  --col-accent-700: rgb(141, 82, 199);
+  --col-accent-500: var(--col-accent);
+  --col-accent-300: rgb(48, 13, 83);
+  --col-accent-200: rgb(39, 9, 71);
+}
+
+.theme-light {
+  --col-bg: lightgrey;
+  --col-bg-100: white;
+  --col-bg-500: var(--col-bg);
+  --col-bg-700: grey;
+
+  --col-fg: black;
+  --col-fg-500: var(--col-fg);
+  --col-fg-700: rgb(31, 31, 31);
+
+  --col-accent-500: cornflowerblue;
+  --col-accent-300: rgb(174, 202, 255);
+}

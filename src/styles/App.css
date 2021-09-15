@@ -9,11 +9,11 @@
   flex-direction: column;
   position: absolute;
   inset: 0;
-  color: var(--col-complementary);
+  color: var(--col-fg);
 }
 
 .Main {
-  background: var(--col-primary);
+  background: var(--col-bg);
   display: flex;
   overflow: hidden;
   flex: 1;
@@ -23,9 +23,9 @@
 
 .Header {
   padding: 0.4rem;
-  background: var(--col-accent);
+  background: var(--col-accent-500);
 }
 
 .Footer {
-  background: var(--col-accent-primary);
+  background: var(--col-accent-300);
 }

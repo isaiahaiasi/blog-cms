@@ -14,15 +14,14 @@
 
 .EditorToolbar {
   height: 6rem;
-  background: var(--col-accent-primary);
-  border-bottom: 1px solid var(--col-accent-complementary);
+  background: var(--col-accent-300);
 }
 
 .EditorPage {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background: var(--col-intermediate-primary);
+  background: var(--col-bg-500);
   padding: 2rem;
   font-size: 1.4rem;
   border-radius: 0 0 0 2rem;

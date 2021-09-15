@@ -33,8 +33,38 @@ li {
 }
 
 .Button {
+  box-sizing: border-box;
   padding: 0.4rem 1rem;
   border-radius: 0.5rem;
-  background: var(--col-accent-primary);
-  color: var(--col-complementary);
+  background: var(--col-accent-300);
+  color: var(--col-fg);
+  // border: solid 2px var(--col-accent-300);
+  transition: 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &:hover {
+    background: var(--col-accent-200);
+  }
+}
+
+// Override default scrollbar styles
+/* width */
+::-webkit-scrollbar {
+  background: #f1f1f1;
+  // width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--col-bg);
+  border: solid 4px var(--col-bg-500);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--col-bg-700);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--col-bg-800, red);
 }

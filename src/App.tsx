@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 
-import './App.css';
+import Header from './components/Header';
 import Footer from './components/Footer';
 import MainCMS from './components/MainCMS';
 import MainLogin from './components/MainLogin';
+
+import './styles/App.css';
 
 type Theme = 'theme-dark' | 'theme-light';
 
