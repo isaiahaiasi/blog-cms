@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 // TODO: caching
 export default function useFetch(
   url: string,
   options = {},
 ): {
+  callFetch: (body?: any) => {};
   isLoading: boolean;
   isError: boolean;
   response: any;
@@ -14,8 +15,17 @@ export default function useFetch(
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
 
-  useEffect(() => {
-    fetch(url, options).then((response) => {
+  const callFetch = useCallback((body) => {
+    console.log('body', body);
+    const full_options = body
+      ? {
+          ...options,
+          body: JSON.stringify(body),
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      : options;
+    fetch(url, full_options).then((response) => {
       setIsLoading(false);
 
       if (!response.ok) {
@@ -30,5 +40,5 @@ export default function useFetch(
     };
   }, []);
 
-  return { isLoading, isError, response };
+  return { callFetch, isLoading, isError, response };
 }
