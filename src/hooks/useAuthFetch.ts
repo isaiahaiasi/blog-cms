@@ -1,7 +1,7 @@
 import useFetch from './useFetch';
 
 export default function useAuthFetch(url: string, options = {}) {
-  // provides auth credentials by default, which can also be overriden
+  // provides auth credentials by default, which can also be overridden
   const optionsWithAuth = { credentials: 'include', ...options };
 
   const { callFetch, isLoading, isError, response } = useFetch(

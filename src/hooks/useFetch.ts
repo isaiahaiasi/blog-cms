@@ -15,30 +15,33 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
 
-  const callFetch = useCallback((body) => {
-    console.log('body', body);
-    const full_options = body
-      ? {
-          ...options,
-          body: JSON.stringify(body),
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+  const callFetch = useCallback(
+    (body) => {
+      console.log('body', body);
+      const full_options = body
+        ? {
+            ...options,
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        : options;
+      fetch(url, full_options).then((response) => {
+        setIsLoading(false);
+
+        if (!response.ok) {
+          setIsError(true);
         }
-      : options;
-    fetch(url, full_options).then((response) => {
-      setIsLoading(false);
 
-      if (!response.ok) {
-        setIsError(true);
-      }
+        setResponse(response);
+      });
 
-      setResponse(response);
-    });
-
-    return () => {
-      // ?
-    };
-  }, []);
+      return () => {
+        // ?
+      };
+    },
+    [url],
+  );
 
   return { callFetch, isLoading, isError, response };
 };
