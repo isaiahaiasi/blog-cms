@@ -11,6 +11,7 @@ import UserContext from './contexts/user';
 import './styles/App.css';
 import type { Nullable } from './utils/Nullable';
 import type { User } from './utils/User';
+import useStickyState from './hooks/useStickyState';
 
 type Theme = 'theme-dark' | 'theme-light';
 
@@ -20,12 +21,7 @@ function App({}: AppProps) {
   // TODO: theme reducer
   const [theme, setTheme] = useState<Theme>('theme-dark');
 
-  // TODO: store login status in browser storage
-  const [user, setUser] = useState<Nullable<User>>(null);
-
-  useEffect(() => {
-    console.log('Setting user', user);
-  }, [user]);
+  const [user, setUser] = useStickyState<Nullable<User>>(null, 'USER_INFO');
 
   return (
     <UserContext.Provider value={[user, setUser]}>
