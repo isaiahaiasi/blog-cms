@@ -18,13 +18,11 @@ export default function MainLogin() {
 
   useEffect(() => {
     async function handleUserLogin() {
-      console.log('response', response);
       if (!response) {
         return;
       }
 
       const resJson = await response?.json();
-      console.log('response JSON:', resJson);
 
       setUser
         ? setUser(resJson?.user as User)

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -22,6 +22,7 @@ function App({}: AppProps) {
   const [theme, setTheme] = useState<Theme>('theme-dark');
 
   const [user, setUser] = useStickyState<Nullable<User>>(null, 'USER_INFO');
+  const isLoggedIn = () => user && user._id;
 
   return (
     <UserContext.Provider value={[user, setUser]}>
@@ -29,6 +30,13 @@ function App({}: AppProps) {
         <Header />
         <main className="Main">
           <Router>
+            <Route path="/">
+              {isLoggedIn() ? (
+                <Redirect to="/editor" />
+              ) : (
+                <Redirect to="/login" />
+              )}
+            </Route>
             <Route path="/login">
               <MainLogin />
             </Route>
