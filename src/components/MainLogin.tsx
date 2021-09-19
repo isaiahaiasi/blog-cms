@@ -1,8 +1,10 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import UserContext from '../contexts/user';
 import useFetch from '../hooks/useFetch';
 import '../styles/MainLogin.scss';
 
 export default function MainLogin() {
+  const [, setUser] = useContext(UserContext) ?? [];
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,7 +16,16 @@ export default function MainLogin() {
   );
 
   useEffect(() => {
-    response?.json().then(console.log).catch();
+    async function handleUserLogin() {
+      const resJson = await response?.json();
+      console.log('response JSON:', resJson);
+
+      setUser
+        ? setUser(resJson?.user)
+        : console.error('UserContext has not defined setUser function!');
+    }
+
+    handleUserLogin();
   }, [response]);
 
   function handleFormSubmit(e: FormEvent) {
