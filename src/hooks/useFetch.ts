@@ -1,16 +1,16 @@
 import { useCallback, useState } from 'react';
 
+export interface UseFetchInterface {
+  (url: string, options: Record<string, any>): {
+    callFetch: (body?: any) => {};
+    isLoading: boolean;
+    isError: boolean;
+    response: Response | null;
+  };
+}
+
 // TODO: caching
-export default function useFetch(
-  url: string,
-  options = {},
-): {
-  callFetch: (body?: any) => {};
-  isLoading: boolean;
-  isError: boolean;
-  response: any;
-  // TODO: cb trigger a re-fetch
-} {
+const useFetch: UseFetchInterface = function (url, options = {}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
@@ -41,4 +41,6 @@ export default function useFetch(
   }, []);
 
   return { callFetch, isLoading, isError, response };
-}
+};
+
+export default useFetch;
