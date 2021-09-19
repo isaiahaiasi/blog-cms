@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import type { PostPreview } from '../utils/Post';
 import UserContext from '../contexts/user';
-import '../styles/Sidebar.scss';
 import useAuthFetch from '../hooks/useAuthFetch';
-import type { User } from '../utils/User';
+import '../styles/Sidebar.scss';
 import type { Nullable } from '../utils/Nullable';
+import type Post from '../utils/Post';
+import type { PostPreview } from '../utils/Post';
+import type { User } from '../utils/User';
+import SidebarPostItem from './SidebarPostItem';
 
 // TODO: move to separate routes file
 function getUserPostsEndpoint(user?: Nullable<User>) {
@@ -47,16 +49,18 @@ export default function Sidebar() {
     if (response) {
       updatePosts();
     }
+
+    // TODO: add cleanup to this since it's sending a request
+    // can receive "Can't perform state update on unmounted component" error
   }, [response]);
 
-  // TODO: create "SidebarPostList" component to reuse for published posts & drafts
   return (
     <div className="Sidebar">
       <div className="SidebarSectionheader">Drafts</div>
       <ul>
         {drafts.map((post) => (
           <li key={post._id} style={{ borderBottom: '1px solid grey' }}>
-            {post.title}
+            <SidebarPostItem post={post as Post} />
           </li>
         ))}
       </ul>
@@ -64,7 +68,7 @@ export default function Sidebar() {
       <ul>
         {publishedPosts.map((post) => (
           <li key={post._id} style={{ borderBottom: '1px solid grey' }}>
-            {post.title} - {post.publishDate}
+            <SidebarPostItem post={post as Post} />
           </li>
         ))}
       </ul>
@@ -93,7 +97,6 @@ function splitPostsByPublicationStatus(posts: PostPreview[]) {
   return posts.reduce<SplitPostsCollection>(postReducer, [[], []]);
 }
 
-// TODO: implement test to see if post has been published yet based on publishDate
 function isPublished(post: PostPreview) {
   return new Date(post.publishDate) <= new Date();
 }

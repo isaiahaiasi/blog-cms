@@ -40,7 +40,10 @@ function App({}: AppProps) {
             <Route path="/login">
               <MainLogin />
             </Route>
-            <Route path="/editor">
+            <Route exact path="/editor">
+              <MainCMS />
+            </Route>
+            <Route path="/editor/:postid">
               <MainCMS />
             </Route>
           </Router>
