@@ -8,7 +8,7 @@ import type { Nullable } from '../utils/Nullable';
 
 // TODO: move to separate routes file
 function getUserPostsEndpoint(user?: Nullable<User>) {
-  return user ? `http://localhost:3000/api/users/${user?._id}/blogs` : '';
+  return user ? `http://localhost:3000/api/users/${user?._id}/blogs-all` : '';
 }
 
 export default function Sidebar() {
@@ -64,7 +64,7 @@ export default function Sidebar() {
       <ul>
         {publishedPosts.map((post) => (
           <li key={post._id} style={{ borderBottom: '1px solid grey' }}>
-            {post.title}
+            {post.title} - {post.publishDate}
           </li>
         ))}
       </ul>
@@ -95,5 +95,5 @@ function splitPostsByPublicationStatus(posts: PostPreview[]) {
 
 // TODO: implement test to see if post has been published yet based on publishDate
 function isPublished(post: PostPreview) {
-  return true;
+  return new Date(post.publishDate) <= new Date();
 }
