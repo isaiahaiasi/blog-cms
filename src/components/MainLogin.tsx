@@ -9,28 +9,25 @@ export default function MainLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const { callFetch, response } = useFetch(
-    'http://localhost:3000/api/auth/login',
-    {
-      credentials: 'include',
-    },
-  );
+  const { callFetch, body } = useFetch('http://localhost:3000/api/auth/login', {
+    credentials: 'include',
+  });
 
   useEffect(() => {
     async function handleUserLogin() {
-      if (!response) {
+      console.log('body', body);
+      if (!body || !(body as Record<string, any>).user) {
+        console.log('no body.user...');
         return;
       }
 
-      const resJson = await response?.json();
-
       setUser
-        ? setUser(resJson?.user as User)
+        ? setUser((body as Record<string, any>).user as User)
         : console.error('UserContext has not defined setUser function!');
     }
 
     handleUserLogin();
-  }, [response]);
+  }, [body]);
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
