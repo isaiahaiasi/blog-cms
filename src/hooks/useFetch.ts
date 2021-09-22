@@ -6,6 +6,7 @@ export interface UseFetchInterface {
     isLoading: boolean;
     isError: boolean;
     response: Response | null;
+    body: null | Record<string, any> | string;
   };
 }
 
@@ -14,20 +15,21 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
+
   // Possibly derivative of response.body, but that's returned in a one-time Stream,
   // and I want to cache it without overriding/extending the response object
   const [body, setBody] = useState<null | Record<string, any> | string>(null);
 
   const callFetch = useCallback(
-    async (body) => {
+    async (postBody) => {
       // Controller to abort fetch on cleanup if necessary
       const abortController = new AbortController();
 
       // Add body & appropriate POST headers
-      const full_options: RequestInit = body
+      const full_options: RequestInit = postBody
         ? {
             ...options,
-            body: JSON.stringify(body),
+            body: JSON.stringify(postBody),
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             signal: abortController.signal,
@@ -36,13 +38,24 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
 
       const res = await fetch(url, full_options);
 
-      setIsLoading(false);
-
       if (!res.ok) {
         setIsError(true);
       }
 
-      setResponse(response);
+      // Read body stream and cast if necessary
+      // NOTE: the returned value won't necessarily be JSON formatted
+      // eg, "Unauthorized" response
+      let resBody = await res.text();
+
+      try {
+        resBody = JSON.parse(resBody);
+      } catch (err) {
+        console.log('Could not parse fetch response as JSON');
+      }
+
+      setBody(resBody);
+      setResponse(res);
+      setIsLoading(false);
 
       return () => {
         console.log('Abandoning fetch request');
