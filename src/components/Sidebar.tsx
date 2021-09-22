@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { setStateFromResponseBody } from '../utils/fetchHelpers';
 import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
 import '../styles/Sidebar.scss';
@@ -24,7 +25,7 @@ export default function Sidebar() {
 
   // Fetch User's blogpost top-level content, and split into "Published" & "unpublished"
   const blogPreviewsEndpoint = getUserPostsEndpoint(user);
-  const { response, isError, isLoading, callFetch } =
+  const { body, isError, isLoading, callFetch } =
     useAuthFetch(blogPreviewsEndpoint);
 
   useEffect(() => {
@@ -32,27 +33,18 @@ export default function Sidebar() {
   }, []);
 
   useEffect(() => {
-    async function updatePosts() {
-      // response cannot be null, because I'm checking below
-      const resPosts = await (response as Response).json();
-
-      console.log(resPosts);
-
-      // if response isn't an array, then something went wrong and don't need to update posts
-      if (!Array.isArray(resPosts)) {
-        return;
-      }
-
-      setPosts(resPosts);
+    console.log('useEffect sidebar...');
+    if (!Array.isArray(body)) {
+      console.log(
+        'Could not set Posts state because response body was not Array',
+      );
+      return;
     }
 
-    if (response) {
-      updatePosts();
-    }
+    // TODO: test array contents conform to post type?
 
-    // TODO: add cleanup to this since it's sending a request
-    // can receive "Can't perform state update on unmounted component" error
-  }, [response]);
+    setPosts(body as Post[]);
+  }, [body]);
 
   return (
     <div className="Sidebar">

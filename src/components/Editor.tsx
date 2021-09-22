@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { setStateFromResponseBody } from '../utils/fetchHelpers';
 import useAuthFetch from '../hooks/useAuthFetch';
 import '../styles/Editor.scss';
 
@@ -13,7 +14,7 @@ export default function Editor() {
   const [postTitle, setPostTitle] = useState('Loading');
   const [postContent, setPostContent] = useState('Loading');
 
-  const { callFetch, response, isLoading, isError } = useAuthFetch(
+  const { callFetch, body, isLoading, isError } = useAuthFetch(
     getBlogPostUrl(postid),
   );
 
@@ -22,23 +23,12 @@ export default function Editor() {
   }, [postid]);
 
   useEffect(() => {
-    async function updateEditorWithFetchedContent() {
-      // response cannot be null, because I'm checking below
-      const resPost = await (response as Response).json();
-
-      // if response doesn't have these Post fields, something is wrong...
-      if (!resPost.title || !resPost.content) {
-        return;
-      }
-
-      setPostTitle(resPost.title);
-      setPostContent(resPost.content);
-    }
-
-    if (response) {
-      updateEditorWithFetchedContent();
-    }
-  }, [response]);
+    console.log('useEffect Editor...');
+    setStateFromResponseBody(body, {
+      title: setPostTitle,
+      content: setPostContent,
+    });
+  }, [body]);
 
   return (
     <div className="EditorContainer">
