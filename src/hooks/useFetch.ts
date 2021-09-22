@@ -1,16 +1,17 @@
 import { useCallback, useState } from 'react';
 
+export type ResponseBody = Record<string, any> | string | null;
+
 export interface UseFetchInterface {
   (url: string, options: Record<string, any>): {
     callFetch: (body?: any) => {};
     isLoading: boolean;
     isError: boolean;
     response: Response | null;
-    body: null | Record<string, any> | string;
+    body: ResponseBody;
   };
 }
 
-// TODO: caching
 const useFetch: UseFetchInterface = function (url, options = {}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -18,7 +19,7 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
 
   // Possibly derivative of response.body, but that's returned in a one-time Stream,
   // and I want to cache it without overriding/extending the response object
-  const [body, setBody] = useState<null | Record<string, any> | string>(null);
+  const [body, setBody] = useState<ResponseBody>(null);
 
   const callFetch = useCallback(
     async (postBody) => {
@@ -50,7 +51,7 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
       try {
         resBody = JSON.parse(resBody);
       } catch (err) {
-        console.log('Could not parse fetch response as JSON');
+        console.log(`Could not parse fetch response ${resBody} as JSON`);
       }
 
       setBody(resBody);
