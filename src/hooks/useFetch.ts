@@ -4,7 +4,7 @@ export type ResponseBody = Record<string, any> | string | null;
 
 export interface UseFetchInterface {
   (url: string, options: Record<string, any>): {
-    callFetch: (body?: any) => {};
+    callFetch: (body?: any) => void;
     isLoading: boolean;
     isError: boolean;
     response: Response | null;

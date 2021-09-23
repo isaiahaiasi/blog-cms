@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { setStateFromResponseBody } from '../utils/fetchHelpers';
 import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
 import '../styles/Sidebar.scss';

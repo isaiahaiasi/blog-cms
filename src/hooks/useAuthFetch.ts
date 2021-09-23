@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import useFetch from './useFetch';
+import { useContext, useEffect } from 'react';
+import UserContext from '../contexts/user';
+import useFetch, { ResponseBody } from './useFetch';
 
 export default function useAuthFetch(url: string, options = {}) {
   // provides auth credentials by default, which can also be overridden
@@ -10,12 +11,25 @@ export default function useAuthFetch(url: string, options = {}) {
     optionsWithAuth,
   );
 
-  // TODO: if "not authenticated" error is returned, log user out
+  const [, setUser] = useContext(UserContext) ?? [];
+
+  // If "not authenticated" response is returned, log user out automatically
   useEffect(() => {
-    if (typeof body === 'string') {
-      console.log('Post response body:', body);
+    if (isUnauthenticatedResponse(body)) {
+      if (setUser) {
+        console.log('Logging user out automatically...');
+        setUser(null);
+      } else {
+        console.error('Could not setUser because UserContext was not defined');
+      }
     }
   }, [body]);
 
   return { callFetch, isLoading, isError, response, body };
+}
+
+// TODO: once API is extended to include authorization status in each response,
+// check that
+function isUnauthenticatedResponse(responseBody: ResponseBody) {
+  return typeof responseBody === 'string' && responseBody === 'Unauthorized';
 }
