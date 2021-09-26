@@ -4,6 +4,9 @@ import type Post from '../utils/Post';
 function addPosts(posts: Post[], newPosts: Post[]): Post[] {
   return [...posts, ...newPosts]; // TODO: re-sort?
 }
+function setPosts(newPosts: Post[]): Post[] {
+  return [...newPosts];
+}
 function updatePost(posts: Post[], id: string, updatedPost: Post): Post[] {
   return posts.map((post) => (post._id === id ? updatedPost : post));
 }
@@ -13,6 +16,7 @@ function deletePost(posts: Post[], id: string): Post[] {
 
 type PostReducerAction =
   | { type: 'add'; posts: Post[] }
+  | { type: 'set'; posts: Post[] }
   | { type: 'update'; id: string; post: Post }
   | { type: 'delete'; id: string };
 
@@ -22,6 +26,8 @@ export const postReducer: PostReducer = (state, action) => {
   switch (action.type) {
     case 'add':
       return addPosts(state, action.posts);
+    case 'set':
+      return setPosts(action.posts);
     case 'update':
       return updatePost(state, action.id, action.post);
     case 'delete':
