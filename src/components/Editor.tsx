@@ -17,20 +17,42 @@ export default function Editor() {
     setPostContent(activePost?.content ?? 'Loading');
   }, [postid]);
 
+  function handleTitleUpdate(e: React.FormEvent<HTMLInputElement>) {
+    setPostTitle(e.currentTarget.value);
+  }
+
+  function handleContentUpdate(e: React.FormEvent<HTMLTextAreaElement>) {
+    setPostContent(e.currentTarget.value);
+  }
+
   return (
     <div className="EditorContainer">
-      <div className="EditorColumn">
+      <form className="EditorColumn">
         <div className="EditorToolbar">Tools n such</div>
         <div className="EditorPage">
-          <div className="EditorPage-Title">{postTitle}</div>
-          <div className="EditorPage-Content">{postContent}</div>
+          <input
+            className="EditorPage-Title"
+            value={postTitle}
+            onChange={handleTitleUpdate}
+          />
+          <textarea
+            className="EditorPage-Content"
+            value={postContent}
+            onChange={handleContentUpdate}
+          />
         </div>
         <div className="EditorPublishBar">
-          <button className="Button">Save as draft</button>
-          <button className="Button">Schedule publication</button>
-          <button className="Button">Publish</button>
+          <button className="Button" type="button">
+            Save as draft
+          </button>
+          <button className="Button" type="button">
+            Schedule publication
+          </button>
+          <button className="Button" type="button">
+            Publish
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
