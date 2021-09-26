@@ -1,19 +1,18 @@
-import React, { useReducer } from 'react';
-import type Post from 'src/utils/Post';
+import React, { Dispatch } from 'react';
+import type Post from '../utils/Post';
 
-// TODO: IMPLEMENT
-function addPost(posts: Post[], post: Post): Post[] {
-  return posts;
+function addPosts(posts: Post[], newPosts: Post[]): Post[] {
+  return [...posts, ...newPosts]; // TODO: re-sort?
 }
-function updatePost(posts: Post[], id: string, post: Post): Post[] {
-  return posts;
+function updatePost(posts: Post[], id: string, updatedPost: Post): Post[] {
+  return posts.map((post) => (post._id === id ? updatedPost : post));
 }
 function deletePost(posts: Post[], id: string): Post[] {
-  return posts;
+  return posts.filter((post) => post._id !== id);
 }
 
 type PostReducerAction =
-  | { type: 'add'; post: Post }
+  | { type: 'add'; posts: Post[] }
   | { type: 'update'; id: string; post: Post }
   | { type: 'delete'; id: string };
 
@@ -22,7 +21,7 @@ type PostReducer = (state: Post[], action: PostReducerAction) => Post[];
 export const postReducer: PostReducer = (state, action) => {
   switch (action.type) {
     case 'add':
-      return addPost(state, action.post);
+      return addPosts(state, action.posts);
     case 'update':
       return updatePost(state, action.id, action.post);
     case 'delete':
@@ -40,5 +39,5 @@ export const postReducer: PostReducer = (state, action) => {
 
 export const PostsContext = React.createContext<{
   posts: Post[];
-  dispatch: PostReducer;
+  dispatch: Dispatch<PostReducerAction>;
 } | null>(null);
