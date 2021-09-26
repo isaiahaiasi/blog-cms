@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { setStateFromResponseBody } from '../utils/fetchHelpers';
-import useAuthFetch from '../hooks/useAuthFetch';
+import { PostsContext } from '../contexts/Posts';
+import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Editor.scss';
-
-function getBlogPostUrl(postid: string): string {
-  return `http://localhost:3000/api/blogs/${postid}`;
-}
 
 export default function Editor() {
   const { postid } = useParams<{ postid: string }>();
+  const { posts } = useDefinedContext(PostsContext);
+  const activePost = posts.find((post) => post._id === postid);
 
   const [postTitle, setPostTitle] = useState('Loading');
   const [postContent, setPostContent] = useState('Loading');
 
-  const { callFetch, body, isLoading, isError } = useAuthFetch(
-    getBlogPostUrl(postid),
-  );
-
   useEffect(() => {
-    callFetch();
+    setPostTitle(activePost?.title ?? 'Loading');
+    setPostContent(activePost?.content ?? 'Loading');
   }, [postid]);
-
-  useEffect(() => {
-    console.log('useEffect Editor...');
-    setStateFromResponseBody(body, {
-      title: setPostTitle,
-      content: setPostContent,
-    });
-  }, [body]);
 
   return (
     <div className="EditorContainer">
