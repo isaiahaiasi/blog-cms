@@ -6,7 +6,8 @@
 
 import React, { useEffect, useState } from 'react';
 
-// T must be something that can be serialized as JSON
+// TODO: add an export to remove the value from localStorage
+// T must be JSON-serializable
 export default function useStickyState<T>(defaultValue: T, key: string) {
   const [value, setValue] = useState<T>(() => {
     const stickyValue = window.localStorage.getItem(key);
