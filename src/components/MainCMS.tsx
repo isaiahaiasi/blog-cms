@@ -1,4 +1,10 @@
 import React, { useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useRouteMatch,
+} from 'react-router-dom';
 import { PostsContext } from '../contexts/Posts';
 import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
@@ -9,6 +15,7 @@ import Editor from './Editor';
 import Sidebar from './Sidebar';
 
 export default function MainCMS() {
+  const { path, url } = useRouteMatch();
   // Fetch posts & dispatch them to post reducer
   const [user] = useDefinedContext(UserContext);
   const { dispatch } = useDefinedContext(PostsContext);
@@ -35,7 +42,14 @@ export default function MainCMS() {
   return (
     <>
       <Sidebar />
-      <Editor />
+      <Switch>
+        <Route exact path={`${path}`}>
+          <div>Select a post or add a new one!</div>
+        </Route>
+        <Route exact path={`${path}/:postid`}>
+          <Editor />
+        </Route>
+      </Switch>
     </>
   );
 }

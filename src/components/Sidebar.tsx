@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouteMatch, Link } from 'react-router-dom';
 import { PostsContext } from '../contexts/Posts';
 import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Sidebar.scss';
@@ -8,13 +9,16 @@ import SidebarPostItem from './SidebarPostItem';
 
 export default function Sidebar() {
   const { posts } = useDefinedContext(PostsContext);
-
+  const { url } = useRouteMatch();
   const [publishedPosts, drafts] = posts
     ? splitPostsByPublicationStatus(posts)
     : [[], []];
 
   return (
     <div className="Sidebar">
+      <Link to={`${url}/new`}>
+        <button className="Button">New Post</button>
+      </Link>
       <div className="SidebarSectionheader">Drafts</div>
       <ul>
         {drafts.map((post) => (

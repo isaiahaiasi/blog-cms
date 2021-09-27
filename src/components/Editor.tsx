@@ -11,15 +11,15 @@ export default function Editor() {
   const { postid } = useParams<{ postid: string }>();
   const [user] = useDefinedContext(UserContext);
 
-  const { posts, dispatch } = useDefinedContext(PostsContext);
+  const { posts } = useDefinedContext(PostsContext);
   const activePost = posts.find((post) => post._id === postid);
 
   const [postTitle, setPostTitle] = useState('Loading');
   const [postContent, setPostContent] = useState('Loading');
 
   useEffect(() => {
-    setPostTitle(activePost?.title ?? 'Loading');
-    setPostContent(activePost?.content ?? 'Loading');
+    setPostTitle(activePost?.title ?? 'New Post');
+    setPostContent(activePost?.content ?? 'New Post');
   }, [postid]);
 
   const [isSending, setIsSending] = useState(false);

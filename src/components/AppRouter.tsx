@@ -1,5 +1,10 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import UserContext from '../contexts/user';
 import MainCMS from './MainCMS';
 import MainLogin from './MainLogin';
@@ -16,10 +21,7 @@ export default function AppRouter() {
       <Route path="/login">
         <MainLogin />
       </Route>
-      <Route exact path="/editor">
-        <MainCMS />
-      </Route>
-      <Route path="/editor/:postid">
+      <Route path="/editor">
         <MainCMS />
       </Route>
     </Router>
