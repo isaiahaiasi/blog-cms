@@ -5,15 +5,7 @@ import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
 import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Editor.scss';
-
-// TODO: extract to proper file
-function getPostBlogAPIEndpoint(userId: string, postId?: string) {
-  if (postId) {
-    throw new Error('Updating posts not implemented yet!!!');
-  } else {
-    return `http://localhost:3000/api/users/${userId}/blogs`;
-  }
-}
+import { getPostBlogAPIEndpoint } from '../utils/routeGetters';
 
 export default function Editor() {
   const { postid } = useParams<{ postid: string }>();

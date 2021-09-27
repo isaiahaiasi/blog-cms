@@ -3,16 +3,10 @@ import { PostsContext } from '../contexts/Posts';
 import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
 import useDefinedContext from '../hooks/useDefinedContext';
-import type { Nullable } from '../utils/Nullable';
 import type Post from '../utils/Post';
-import type { User } from '../utils/User';
+import { getUserPostsEndpoint } from '../utils/routeGetters';
 import Editor from './Editor';
 import Sidebar from './Sidebar';
-
-// TODO: move to separate routes file
-function getUserPostsEndpoint(user?: Nullable<User>) {
-  return user ? `http://localhost:3000/api/users/${user?._id}/blogs-all` : '';
-}
 
 export default function MainCMS() {
   // Fetch posts & dispatch them to post reducer
