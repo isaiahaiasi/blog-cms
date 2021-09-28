@@ -7,53 +7,54 @@ import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Editor.scss';
 import { getPostBlogAPIEndpoint } from '../utils/routeGetters';
 
-export default function Editor() {
-  const { postid } = useParams<{ postid: string }>();
-  const [user] = useDefinedContext(UserContext);
+interface EditedPost {
+  title: string;
+  content: string;
+}
 
+const defaultPost = {
+  title: 'New Post',
+  content: 'Hello world',
+};
+
+export default function Editor() {
+  const [user] = useDefinedContext(UserContext);
+  const { postid } = useParams<{ postid: string }>();
   const { posts } = useDefinedContext(PostsContext);
   const activePost = posts.find((post) => post._id === postid);
 
-  const [postTitle, setPostTitle] = useState('Loading');
-  const [postContent, setPostContent] = useState('Loading');
+  const [editedPost, setEditedPost] = useState<EditedPost>({ ...defaultPost });
 
   useEffect(() => {
-    setPostTitle(activePost?.title ?? 'New Post');
-    setPostContent(activePost?.content ?? 'New Post');
+    if (activePost?.title && activePost?.content) {
+      setEditedPost({ title: activePost.title, content: activePost.content });
+    } else {
+      setEditedPost({ ...defaultPost });
+    }
   }, [postid]);
 
-  const [isSending, setIsSending] = useState(false);
-  const { callFetch, isLoading } = useAuthFetch(
-    getPostBlogAPIEndpoint(user?._id ?? 'undefined'),
-  );
-  useEffect(() => {
-    if (isSending) {
-      callFetch({
-        title: postTitle,
-        content: postContent,
-        publishDate: new Date(),
-      });
-    }
-  }, [isSending]);
+  const ApiPostBlogEndpoint = getPostBlogAPIEndpoint(user?._id ?? 'undefined');
+  const { callFetch } = useAuthFetch(ApiPostBlogEndpoint);
 
-  useEffect(() => {
-    if (isLoading === false) {
-      console.log('sending complete!');
-      setIsSending(false);
-    }
-  }, [isLoading]);
+  function handlePostUpdate(
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    // must be extracted b/c `currentTarget` does not persist in asynchronous fn
+    const [name, value] = [e.currentTarget.name, e.currentTarget.value];
 
-  function handleTitleUpdate(e: React.FormEvent<HTMLInputElement>) {
-    setPostTitle(e.currentTarget.value);
-  }
-
-  function handleContentUpdate(e: React.FormEvent<HTMLTextAreaElement>) {
-    setPostContent(e.currentTarget.value);
+    setEditedPost((prevPost) => ({
+      ...prevPost,
+      [name]: value,
+    }));
   }
 
   function publishPost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsSending(true);
+    callFetch({
+      title: editedPost.title,
+      content: editedPost.content,
+      publishDate: new Date(),
+    });
   }
 
   return (
@@ -63,13 +64,15 @@ export default function Editor() {
         <div className="EditorPage">
           <input
             className="EditorPage-Title"
-            value={postTitle}
-            onChange={handleTitleUpdate}
+            value={editedPost.title}
+            onChange={handlePostUpdate}
+            name="title"
           />
           <textarea
             className="EditorPage-Content"
-            value={postContent}
-            onChange={handleContentUpdate}
+            value={editedPost.content}
+            onChange={handlePostUpdate}
+            name="content"
           />
         </div>
         <div className="EditorPublishBar">

@@ -28,10 +28,11 @@ export default function MainCMS() {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect sidebar...');
+    console.log('useEffect MainCMS...');
     if (!Array.isArray(body)) {
       console.log(
         'Could not set Posts state because response body was not Array',
+        body,
       );
       return;
     }

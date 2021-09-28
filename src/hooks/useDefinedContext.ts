@@ -8,17 +8,8 @@ import { useContext } from 'react';
 
 export default function useDefinedContext<T>(
   context: React.Context<T>,
-  // typeGuard?: (obj: any) => boolean,
 ): NonNullable<T> {
   const result = useContext(context);
-
-  // if (typeGuard) {
-  //   if (!typeGuard(result)) {
-  //     throw new Error(
-  //       'Context did not match expected type. This might mean that no ContextProvider was found.',
-  //     );
-  //   }
-  // } else
 
   if (result === null || result === undefined) {
     throw new Error(
