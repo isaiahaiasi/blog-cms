@@ -5,6 +5,7 @@ import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
 import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Editor.scss';
+import type Post from '../utils/Post';
 import { getPostBlogAPIEndpoint } from '../utils/routeGetters';
 
 interface EditedPost {
@@ -20,21 +21,14 @@ const defaultPost = {
 export default function Editor() {
   const [user] = useDefinedContext(UserContext);
   const { postid } = useParams<{ postid: string }>();
-  const { posts } = useDefinedContext(PostsContext);
+  const { posts, dispatch } = useDefinedContext(PostsContext);
   const activePost = posts.find((post) => post._id === postid);
 
   const [editedPost, setEditedPost] = useState<EditedPost>({ ...defaultPost });
 
-  useEffect(() => {
-    if (activePost?.title && activePost?.content) {
-      setEditedPost({ title: activePost.title, content: activePost.content });
-    } else {
-      setEditedPost({ ...defaultPost });
-    }
-  }, [postid]);
-
   const ApiPostBlogEndpoint = getPostBlogAPIEndpoint(user?._id ?? 'undefined');
-  const { callFetch } = useAuthFetch(ApiPostBlogEndpoint);
+  const { callFetch, body: publishRequestResponse } =
+    useAuthFetch(ApiPostBlogEndpoint);
 
   function handlePostUpdate(
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -56,6 +50,32 @@ export default function Editor() {
       publishDate: new Date(),
     });
   }
+
+  // whenever the selected post changes, change the text to match
+  // TODO: if there's unsaved content, warn before allowing the user to switch
+  useEffect(() => {
+    if (activePost?.title && activePost?.content) {
+      setEditedPost({ title: activePost.title, content: activePost.content });
+    } else {
+      setEditedPost({ ...defaultPost });
+    }
+  }, [postid]);
+
+  // add newly published post to list of posts if publish fetch returns successful
+  useEffect(() => {
+    if (!publishRequestResponse) {
+      return;
+    }
+
+    const responsePost = publishRequestResponse as Post;
+
+    // make sure the response is actually the returned post, and return if not
+    if (!responsePost._id || !responsePost.title) {
+      return;
+    }
+
+    dispatch({ type: 'add', posts: [responsePost] });
+  }, [publishRequestResponse]);
 
   return (
     <div className="EditorContainer">
