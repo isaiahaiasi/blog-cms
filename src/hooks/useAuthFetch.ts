@@ -28,8 +28,6 @@ export default function useAuthFetch(url: string, options = {}) {
   return { callFetch, isLoading, isError, response, body };
 }
 
-// TODO: once API is extended to include authorization status in each response,
-// check that
 function isUnauthenticatedResponse(responseBody: ResponseBody) {
   return typeof responseBody === 'string' && responseBody === 'Unauthorized';
 }

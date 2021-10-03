@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type ResponseBody = Record<string, any> | string | null;
 
@@ -13,20 +13,28 @@ export interface UseFetchInterface {
 }
 
 const useFetch: UseFetchInterface = function (url, options = {}) {
+  // state variables exported by useFetch
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
-
-  // Possibly derivative of response.body, but that's returned in a one-time Stream,
-  // and I want to cache it without overriding/extending the response object
   const [resBody, setResBody] = useState<ResponseBody>(null);
+
+  // state necessary for triggering request on command, using useEffect
   const [reqBody, setReqBody] = useState<Record<string, any> | null>(null);
 
   // Controller to abort fetch on cleanup if necessary
   const abortController = new AbortController();
 
   useEffect(() => {
-    console.log('useeffect fetch...');
+    // only fetch if request *isn't* null (the default value)
+    // reqBody === undefined is valid & *should* trigger request
+    if (reqBody === null) {
+      return;
+    }
+
+    console.log('calling useEffect fetch...');
+
+    let isMounted = true;
 
     // Add body & appropriate POST headers
     const full_options: RequestInit = reqBody
@@ -43,22 +51,16 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
       console.log('fetching');
       const res = await fetch(url, full_options);
 
+      // State should never be set on an unmounted component
+      if (!isMounted) return;
+
       if (!res.ok) {
         setIsError(true);
       }
 
-      // Read body stream and cast if necessary
-      // NOTE: the returned value won't necessarily be JSON formatted
-      // eg, "Unauthorized" response
-      let responseBody = await res.text();
+      let responseBody = await parseResponse(res);
 
-      try {
-        responseBody = JSON.parse(responseBody);
-      } catch (err) {
-        console.log(`Could not parse fetch response ${responseBody} as JSON`);
-      }
-
-      if (!abortController.signal.aborted) {
+      if (!abortController.signal.aborted && isMounted) {
         setResBody(responseBody);
         setResponse(res);
         setIsLoading(false);
@@ -67,9 +69,9 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
 
     doFetch();
 
-    // cleanup
     return () => {
       console.log('Abandoning fetch request');
+      isMounted = false;
       abortController?.abort();
     };
   }, [reqBody]);
@@ -80,5 +82,19 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
 
   return { callFetch, isLoading, isError, response, body: resBody };
 };
+
+// Read body stream and cast if necessary
+// NOTE: the returned value won't necessarily be JSON formatted
+// eg, "Unauthorized" response
+async function parseResponse(res: Response) {
+  const responseText = await res.text();
+
+  try {
+    return JSON.parse(responseText);
+  } catch (err) {
+    console.log(`Could not parse fetch response ${responseText} as JSON`);
+    return responseText;
+  }
+}
 
 export default useFetch;

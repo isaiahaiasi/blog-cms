@@ -15,7 +15,7 @@ import Editor from './Editor';
 import Sidebar from './Sidebar';
 
 export default function MainCMS() {
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
   // Fetch posts & dispatch them to post reducer
   const [user] = useDefinedContext(UserContext);
   const { dispatch } = useDefinedContext(PostsContext);
@@ -23,10 +23,12 @@ export default function MainCMS() {
     getUserPostsEndpoint(user),
   );
 
+  // fetch user posts on mount
   useEffect(() => {
     callFetch();
   }, []);
 
+  // update the posts when the response body is set
   useEffect(() => {
     console.log('useEffect MainCMS...');
     if (!Array.isArray(body)) {
