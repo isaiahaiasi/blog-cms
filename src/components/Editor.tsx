@@ -6,7 +6,10 @@ import useAuthFetch from '../hooks/useAuthFetch';
 import useDefinedContext from '../hooks/useDefinedContext';
 import '../styles/Editor.scss';
 import type Post from '../utils/Post';
-import { getPostBlogAPIEndpoint } from '../utils/routeGetters';
+import {
+  getPostBlogAPIEndpoint,
+  getUpdateBlogAPIEndpoint,
+} from '../utils/routeGetters';
 
 interface EditedPost {
   title: string;
@@ -26,10 +29,6 @@ export default function Editor() {
 
   const [editedPost, setEditedPost] = useState<EditedPost>({ ...defaultPost });
 
-  const ApiPostBlogEndpoint = getPostBlogAPIEndpoint(user?._id ?? 'undefined');
-  const { callFetch, body: publishRequestResponse } =
-    useAuthFetch(ApiPostBlogEndpoint);
-
   function handlePostUpdate(
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
@@ -42,13 +41,28 @@ export default function Editor() {
     }));
   }
 
+  // TODO: instead of all this ternary logic, just make 2 different functions?
+  const ApiPostBlogEndpoint = isNewPost()
+    ? getPostBlogAPIEndpoint(user?._id ?? 'undefined')
+    : getUpdateBlogAPIEndpoint(postid);
+
+  const { callFetch, body: publishRequestResponse } =
+    useAuthFetch(ApiPostBlogEndpoint);
+
   function publishPost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    callFetch({
+
+    const fetchBody = {
       title: editedPost.title,
       content: editedPost.content,
-      publishDate: new Date(),
-    });
+      publishDate: activePost?.publishDate ?? new Date(),
+    };
+
+    callFetch(isNewPost() ? 'POST' : 'PUT', fetchBody);
+  }
+
+  function isNewPost() {
+    return postid === 'new';
   }
 
   // whenever the selected post changes, change the text to match
@@ -74,7 +88,11 @@ export default function Editor() {
       return;
     }
 
-    dispatch({ type: 'add', posts: [responsePost] });
+    if (isNewPost()) {
+      dispatch({ type: 'add', posts: [responsePost] });
+    } else {
+      dispatch({ type: 'update', id: postid, post: responsePost });
+    }
   }, [publishRequestResponse]);
 
   return (

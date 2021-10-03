@@ -25,7 +25,7 @@ export default function MainCMS() {
 
   // fetch user posts on mount
   useEffect(() => {
-    callFetch();
+    callFetch('GET');
   }, []);
 
   // update the posts when the response body is set

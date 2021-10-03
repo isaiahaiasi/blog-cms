@@ -15,7 +15,6 @@ export default function MainLogin() {
 
   useEffect(() => {
     async function handleUserLogin() {
-      console.log('body', body);
       if (!body || !(body as Record<string, any>).user) {
         console.log('no body.user...');
         return;
@@ -32,7 +31,7 @@ export default function MainLogin() {
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
 
-    callFetch({ username, password });
+    callFetch('POST', { username, password });
   }
 
   return (
@@ -45,6 +44,7 @@ export default function MainLogin() {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </label>
         <label>
@@ -54,6 +54,7 @@ export default function MainLogin() {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </label>
         <button className="Button" type="submit">
