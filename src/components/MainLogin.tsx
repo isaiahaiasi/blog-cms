@@ -3,13 +3,14 @@ import type { User } from 'src/utils/User';
 import UserContext from '../contexts/user';
 import useFetch from '../hooks/useFetch';
 import '../styles/MainLogin.scss';
+import { getLoginEndpoint } from '../utils/routeGetters';
 
 export default function MainLogin() {
   const [, setUser] = useContext(UserContext) ?? [];
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const { callFetch, body } = useFetch('http://localhost:3000/api/auth/login', {
+  const { callFetch, body } = useFetch(getLoginEndpoint(), {
     credentials: 'include',
   });
 
