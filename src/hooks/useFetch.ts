@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
+import type { Nullable } from '../utils/Nullable';
 
-export type ResponseBody = Record<string, any> | string | null;
+export type ResponseBody = {
+  content: any;
+  success: boolean;
+  errors?: any[];
+};
 
 export interface UseFetchInterface {
   (url: string, options: Partial<RequestInit>): {
@@ -8,7 +13,7 @@ export interface UseFetchInterface {
     isLoading: boolean;
     isError: boolean;
     response: Response | null;
-    body: ResponseBody;
+    body: ResponseBody | null;
   };
 }
 
@@ -33,7 +38,7 @@ const useFetch: UseFetchInterface = function (url, options = {}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [response, setResponse] = useState<null | Response>(null);
-  const [resBody, setResBody] = useState<ResponseBody>(null);
+  const [resBody, setResBody] = useState<Nullable<ResponseBody>>(null);
 
   // state necessary for triggering request on command, using useEffect
   const [reqInfo, setReqInfo] = useState<RequestInfo | null>(null);

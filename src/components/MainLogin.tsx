@@ -16,13 +16,13 @@ export default function MainLogin() {
 
   useEffect(() => {
     async function handleUserLogin() {
-      if (!body || !(body as Record<string, any>).user) {
+      if (!body || !body.content) {
         console.log('no body.user...');
         return;
       }
 
       setUser
-        ? setUser((body as Record<string, any>).user as User)
+        ? setUser(body.content as User)
         : console.error('UserContext has not defined setUser function!');
     }
 

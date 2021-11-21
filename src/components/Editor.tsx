@@ -81,7 +81,7 @@ export default function Editor() {
       return;
     }
 
-    const responsePost = publishRequestResponse as Post;
+    const responsePost = publishRequestResponse.content as Post;
 
     // make sure the response is actually the returned post, and return if not
     if (!responsePost._id || !responsePost.title) {

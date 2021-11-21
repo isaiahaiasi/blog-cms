@@ -28,6 +28,6 @@ export default function useAuthFetch(url: string, options = {}) {
   return { callFetch, isLoading, isError, response, body };
 }
 
-function isUnauthenticatedResponse(responseBody: ResponseBody) {
+function isUnauthenticatedResponse(responseBody: ResponseBody | null) {
   return typeof responseBody === 'string' && responseBody === 'Unauthorized';
 }

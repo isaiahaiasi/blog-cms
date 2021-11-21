@@ -1,10 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { PostsContext } from '../contexts/Posts';
 import UserContext from '../contexts/user';
 import useAuthFetch from '../hooks/useAuthFetch';
@@ -16,12 +11,11 @@ import Sidebar from './Sidebar';
 
 export default function MainCMS() {
   const { path } = useRouteMatch();
+
   // Fetch posts & dispatch them to post reducer
   const [user] = useDefinedContext(UserContext);
   const { dispatch } = useDefinedContext(PostsContext);
-  const { body, isError, isLoading, callFetch } = useAuthFetch(
-    getUserPostsEndpoint(user),
-  );
+  const { body, callFetch } = useAuthFetch(getUserPostsEndpoint(user));
 
   // fetch user posts on mount
   useEffect(() => {
@@ -30,16 +24,20 @@ export default function MainCMS() {
 
   // update the posts when the response body is set
   useEffect(() => {
-    console.log('useEffect MainCMS...');
-    if (!Array.isArray(body)) {
-      console.log(
+    if (typeof body === 'string') {
+      return console.error('unauthorized response received', body);
+    }
+
+    const content = body?.content ?? [];
+
+    if (!Array.isArray(content)) {
+      return console.error(
         'Could not set Posts state because response body was not Array',
         body,
       );
-      return;
     }
 
-    dispatch({ type: 'set', posts: body as Post[] });
+    dispatch({ type: 'set', posts: content as Post[] });
   }, [body]);
 
   return (
