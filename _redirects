@@ -1,0 +1,3 @@
+# Netlify configuration file for redirects
+# For SPAs, a fallback is required since URL paths don't direct to files
+/*	/index.html	200
